@@ -27,7 +27,7 @@ function Get-GzipContent {
         [String[]] $Path
     )
     Begin {
-        $Encofing = [Encoding]::Default
+        $Encoding = [Encoding]::Default
     }
     Process {
         foreach ($p in $Path) {
@@ -40,7 +40,7 @@ function Get-GzipContent {
                     $gzipS = New-Object Compression.GzipStream $inputS, ([Compression.CompressionMode]::Decompress)
                     $outputS = New-Object MemoryStream
                     $gzipS.CopyTo($outputS)
-                    $content = $Encofing.GetString($outputS.ToArray())
+                    $content = $Encoding.GetString($outputS.ToArray())
                     Write-Verbose "Content length $($content.Length)"
                     Write-Output $content
                 }
