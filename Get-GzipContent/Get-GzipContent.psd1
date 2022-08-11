@@ -9,28 +9,28 @@
 @{
 
     # Script module or binary module file associated with this manifest.
-    RootModule        = 'Get-GzipContent.psm1'
+    RootModule = 'Get-GzipContent.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.2'
+    ModuleVersion = '0.2.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
     # ID used to uniquely identify this module
-    GUID              = '18a360f7-e3b2-40bd-b4e9-e702fc4262bd'
+    GUID = '18a360f7-e3b2-40bd-b4e9-e702fc4262bd'
 
     # Author of this module
-    Author            = 'Takatoshi Kuriyama'
+    Author = 'Takatoshi Kuriyama'
 
     # Company or vendor of this module
     # CompanyName       = 'Unknown'
 
     # Copyright statement for this module
-    Copyright         = '(c) 2020 Takatoshi Kuriyama. All rights reserved.'
+    Copyright = '(c) 2020 Takatoshi Kuriyama. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'Gets the content of the gzip archive at the specified location.'
+    Description = 'Gets the content of the gzip archive at the specified location.'
 
     # Minimum version of the PowerShell engine required by this module
     # PowerShellVersion = '6.0'
@@ -72,13 +72,13 @@
     FunctionsToExport = @('Get-GzipContent')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport   = @()
+    CmdletsToExport = @()
 
     # Variables to export from this module
     VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport   = @('zcat')
+    AliasesToExport = @('zcat')
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()
@@ -90,12 +90,12 @@
     # FileList  @()
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-    PrivateData       = @{
+    PrivateData = @{
 
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = @('gz', 'gzip', 'zcat')
+            Tags = @('gz', 'gzip', 'zcat')
 
             # A URL to the license for this module.
             LicenseUri = 'https://github.com/krymtkts/Get-GzipContent/blob/master/LICENSE'
@@ -107,7 +107,15 @@
             # IconUri = ''
 
             # ReleaseNotes of this module
-            # ReleaseNotes = ''
+            ReleaseNotes = @'
+## 0.2.0
+
+- Add the -Delimiter option like Get-Content.
+
+## 0.1.2
+
+- Fix to handle wildcard character in Path option.
+'@
 
         } # End of PSData hashtable
 
