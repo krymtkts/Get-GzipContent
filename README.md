@@ -15,11 +15,20 @@ Get the content of archive.gz
 Get-GzipContent -Path .\archive.gz
 ```
 
-Get the contents of archives.
+`Path` parameter supports value from pipeline.
 
 ```powershell
 Get-ChildItem -Path 'file*.gz' | Get-GzipContent
 ```
+
+Assigned alias is `zcat`.
+`Get-GzipContent` splits output content by value of `Delimiter` option.
+
+```powershell
+ls *.gz | zcat | select -Skip 2 -First 10
+```
+
+Default value of `Delimiter` option is the value of `System.Environment.NewLine` property.
 
 ## Installation
 
@@ -38,7 +47,7 @@ Install-Module Get-GzipContent
 #### Clone the repository
 
 Clone the repository to your PowerShell module path.
-Check your module pathes by executing `$env:PSModulePath`.
+Check your module paths by executing `$env:PSModulePath`.
 
 Sample command is below.
 
@@ -49,7 +58,7 @@ git clone https://github.com/krymtkts/Get-GzipContent
 
 ### 2. Import module
 
-The command is below. Add `-Force` paramter when you update module.
+The command is below. Add `-Force` parameter when you update module.
 
 ```powershell
 Import-Module -Name Get-GzipContent

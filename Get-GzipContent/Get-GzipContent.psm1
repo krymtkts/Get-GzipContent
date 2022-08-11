@@ -24,37 +24,39 @@ function Get-GzipContent {
     Param (
         [Parameter(Mandatory = $True, ValueFromPipeline = $True)]
         [ValidateScript( { $_ | Test-Path -PathType Leaf })]
-        [String[]] $Path
+        [String[]] $Path,
+        [Parameter()]
+        [String] $Delimiter = [System.Environment]::NewLine
     )
     Begin {
         $Encoding = [Encoding]::Default
     }
     Process {
-        foreach ($p in $Path) {
-            $filePaths = (Get-Item -Path $p).FullName
-            Write-Verbose "Get-GzipContent from $filePaths"
-            foreach ($filePath in $filePaths) {
-                Write-Verbose "Get-GzipContent from $filePath"
-                try {
-                    $inputS = New-Object FileStream $filePath, ([FileMode]::Open), ([FileAccess]::Read), ([FileShare]::Read)
-                    $gzipS = New-Object Compression.GzipStream $inputS, ([Compression.CompressionMode]::Decompress)
-                    $outputS = New-Object MemoryStream
-                    $gzipS.CopyTo($outputS)
-                    $content = $Encoding.GetString($outputS.ToArray())
-                    Write-Verbose "Content length $($content.Length)"
-                    Write-Output $content
-                }
-                catch {
-                    Write-Error "Failed to decompress $filePath $($PSItem.Exception.message)"
-                    throw
-                }
-                finally {
-                    foreach ($s in @($outputS, $gzipS, $inputS)) {
-                        if ($s) {
-                            $s.Close()
-                        }
+        $Path | Get-Item | Select-Object -ExpandProperty FullName | ForEach-Object {
+            $filePath = $_
+            Write-Verbose "Get-GzipContent from $filePath"
+            try {
+                $fs = New-Object FileStream $filePath, ([FileMode]::Open), ([FileAccess]::Read), ([FileShare]::Read)
+                $gs = New-Object Compression.GzipStream $fs, ([Compression.CompressionMode]::Decompress)
+                $reader = New-Object StreamReader ($gs, $Encoding)
+                $line = $null;
+                $count = 0
+                while ($null -ne ($line = $reader.ReadLine() )) {
+                    $line -split $Delimiter | ForEach-Object {
+                        Write-Output $_
+                        $count++
                     }
                 }
+                Write-Verbose "Contents count is $count"
+            }
+            catch {
+                Write-Error "Failed to decompress $filePath $($PSItem.Exception.message)"
+                throw
+            }
+            finally {
+                Write-Verbose 'Try release resources.'
+                $reader, $gs, $fs | Where-Object { $null -ne $_ } | ForEach-Object { $_.Close() }
+                Write-Verbose 'Released.'
             }
         }
     }
